@@ -3,8 +3,9 @@ export const config = {
   recipient: { name: 'Saint' },
   sender: { name: 'Diana' },
   theme: {
-    background: '#f1f1f1', soft: '#ffffff', primary: '#171717',
-    secondary: '#d9d9d9', text: '#171717', muted: '#575757',
+    background: '#f2f0ed', soft: '#fffdfb', primary: '#202020',
+    secondary: '#d7cec5', text: '#202020', muted: '#5b5550',
+    accent: '#705a4d',
   },
   welcome: {
     eyebrow: 'De tu mejor amiga, Diana',
@@ -36,9 +37,9 @@ export const config = {
     ],
   },
   memories: [
-    { title: 'Volver a mirarnos', date: 'Uno de nuestros momentos', description: 'Me encanta recordar esos instantes en los que bastaba una mirada para entendernos.', image: new URL('./img/selected/red-dress.jpg', import.meta.url).href, alt: 'Saint y Diana bailando en un jardín', imagePosition: 'center', accent: '#202020', art: '01' },
-    { title: 'Celebrar lo nuestro', date: 'Un brindis para dos', description: 'Entre sonrisas y pequeños detalles, también aprendimos a celebrar el camino que compartimos.', image: new URL('./img/selected/picnic.jpg', import.meta.url).href, alt: 'Saint y Diana brindando durante un picnic', imagePosition: 'center 37%', orientation: 'portrait', accent: '#383838', art: '02' },
-    { title: 'Nuestro sí', date: '23 de febrero de 2026', description: 'Ese día prometimos caminar juntos. Una fecha que siempre tendrá un lugar especial en nuestra historia.', image: new URL('./img/selected/ceremony-desktop.jpg', import.meta.url).href, alt: 'Saint y Diana durante su ceremonia de matrimonio', imagePosition: 'center 40%', accent: '#171717', art: '03' },
+    { title: 'Volver a mirarnos', date: 'Uno de nuestros momentos', description: 'Me encanta recordar esos instantes en los que bastaba una mirada para entendernos.', image: new URL('./img/selected/red-dress.jpg', import.meta.url).href, alt: 'Saint y Diana bailando en un jardín', imagePosition: 'center', accent: '#59453c', art: '01' },
+    { title: 'Celebrar lo nuestro', date: 'Un brindis para dos', description: 'Entre sonrisas y pequeños detalles, también aprendimos a celebrar el camino que compartimos.', image: new URL('./img/selected/picnic.jpg', import.meta.url).href, alt: 'Saint y Diana brindando durante un picnic', imagePosition: 'center 37%', orientation: 'portrait', accent: '#675147', art: '02' },
+    { title: 'Nuestro sí', date: '23 de febrero de 2026', description: 'Ese día prometimos caminar juntos. Una fecha que siempre tendrá un lugar especial en nuestra historia.', image: new URL('./img/selected/ceremony-desktop.jpg', import.meta.url).href, alt: 'Saint y Diana durante su ceremonia de matrimonio', imagePosition: 'center 40%', accent: '#413833', art: '03' },
   ],
   memoriesSection: {
     eyebrow: 'Nuestra historia en imágenes',

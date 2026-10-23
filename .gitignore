@@ -1,0 +1,4 @@
+node_modules/
+dist/
+src/img/*.jpg
+src/img/selected/BODA SAINT Y DIANA-*.jpg

@@ -3,9 +3,9 @@ export const config = {
   recipient: { name: 'Saint' },
   sender: { name: 'Diana' },
   theme: {
-    background: '#f2f0ed', soft: '#fffdfb', primary: '#202020',
-    secondary: '#d7cec5', text: '#202020', muted: '#5b5550',
-    accent: '#705a4d',
+    background: '#f2f2f0', soft: '#ffffff', primary: '#242424',
+    secondary: '#d2d2d0', text: '#242424', muted: '#595959',
+    accent: '#5c5c5c', heart: '#b91c1c',
   },
   welcome: {
     eyebrow: 'De tu mejor amiga, Diana',
@@ -37,13 +37,13 @@ export const config = {
     ],
   },
   memories: [
-    { title: 'Volver a mirarnos', date: 'Uno de nuestros momentos', description: 'Me encanta recordar esos instantes en los que bastaba una mirada para entendernos.', image: new URL('./img/selected/red-dress.jpg', import.meta.url).href, alt: 'Saint y Diana bailando en un jardín', imagePosition: 'center', accent: '#59453c', art: '01' },
-    { title: 'Celebrar lo nuestro', date: 'Un brindis para dos', description: 'Entre sonrisas y pequeños detalles, también aprendimos a celebrar el camino que compartimos.', image: new URL('./img/selected/picnic.jpg', import.meta.url).href, alt: 'Saint y Diana brindando durante un picnic', imagePosition: 'center 37%', orientation: 'portrait', accent: '#675147', art: '02' },
-    { title: 'Nuestro sí', date: '23 de febrero de 2026', description: 'Ese día prometimos caminar juntos. Una fecha que siempre tendrá un lugar especial en nuestra historia.', image: new URL('./img/selected/ceremony-desktop.jpg', import.meta.url).href, alt: 'Saint y Diana durante su ceremonia de matrimonio', imagePosition: 'center 40%', accent: '#413833', art: '03' },
+    { title: 'Volver a mirarnos', date: 'Uno de nuestros momentos', description: 'Me encanta recordar esos instantes en los que bastaba una mirada para entendernos.', image: new URL('./img/selected/red-dress.jpg', import.meta.url).href, alt: 'Saint y Diana bailando en un jardín', imagePosition: 'center', accent: '#525252', art: '01' },
+    { title: 'Celebrar lo nuestro', date: 'Un brindis para dos', description: 'Entre sonrisas y pequeños detalles, también aprendimos a celebrar el camino que compartimos.', image: new URL('./img/selected/picnic.jpg', import.meta.url).href, alt: 'Saint y Diana brindando durante un picnic', imagePosition: 'center 37%', orientation: 'portrait', accent: '#626262', art: '02' },
+    { title: 'Nuestro sí', date: '23 de febrero de 2026', description: 'Ese día prometimos caminar juntos. Una fecha que siempre tendrá un lugar especial en nuestra historia.', image: new URL('./img/selected/ceremony-desktop.jpg', import.meta.url).href, alt: 'Saint y Diana durante su ceremonia de matrimonio', imagePosition: 'center 40%', accent: '#444444', art: '03' },
   ],
   memoriesSection: {
     eyebrow: 'Nuestra historia en imágenes',
-    title: 'Los momentos que nos hicieron nosotros',
+    title: 'Los momentos que nos hicieron un "nosotros"',
     galleryEyebrow: 'Más pedacitos de nosotros',
   },
   gallery: [
@@ -54,7 +54,7 @@ export const config = {
     { image: new URL('./img/selected/picnic-wide.jpg', import.meta.url).href, alt: 'Saint y Diana compartiendo un picnic', caption: 'Nuestro brindis' },
     { image: new URL('./img/selected/park.jpg', import.meta.url).href, alt: 'Saint y Diana en un picnic en el parque', caption: 'Un día para recordar' },
     { image: new URL('./img/selected/wedding-together.jpg', import.meta.url).href, alt: 'Saint y Diana mirándose en la playa junto a su perro el día de la boda', caption: 'El día de nuestro sí' },
-    { image: new URL('./img/selected/selfie.jpg', import.meta.url).href, alt: 'Selfie sonriente de Saint y Diana', caption: 'Siempre nosotros' },
+    { image: new URL('./img/selected/wedding-finale.jpg', import.meta.url).href, alt: 'Saint besa a Diana en la playa durante su sesión de boda', caption: 'Siempre nosotros' },
   ],
   letter: {
     eyebrow: 'Palabras que guardo para ti',
@@ -90,7 +90,8 @@ export const config = {
     title: 'Antes de descubrirlo...',
     introduction: 'Tres preguntas sobre nuestra historia y una sorpresa al final.',
     allowHints: true,
-    persistProgress: true,
+    persistProgress: false,
+    resetOnOpen: true,
     storageKey: 'regalo-herrera-quiz-v2',
     questions: [
       { id: 'color-favorito', text: '¿Cuál es mi color favorito?', options: [{ id: 'negro', label: 'Negro' }, { id: 'lila', label: 'Lila' }, { id: 'rosado', label: 'Rosado' }], correctOptionId: 'lila', hint: 'Pista: piensa en un tono suave.', explicitHint: 'Pista final: es un tono de violeta.' },

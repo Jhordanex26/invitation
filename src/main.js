@@ -22,24 +22,28 @@ const section = (className, label) => {
   element.setAttribute('aria-label', label);
   return element;
 };
-const art = (className, label) => add(node('div', `photo-art ${className}`), node('span', 'art-sun'), node('span', 'art-arch'), node('span', 'art-label', label));
-
 function photo(image, alt, className, position = 'center', desktopImage = '', desktopPosition = 'center') {
   const frame = node('div', `photo-frame ${className}`);
   frame.style.setProperty('--image-position', position);
   frame.style.setProperty('--desktop-position', desktopPosition);
-  const fallback = art('photo-fallback', 'un instante nuestro');
-  fallback.setAttribute('role', 'img');
-  fallback.setAttribute('aria-label', `Espacio reservado para: ${alt}`);
-  add(frame, fallback);
+  const skeleton = node('div', 'photo-skeleton');
+  skeleton.setAttribute('aria-hidden', 'true');
+  const error = node('span', 'photo-error', 'Imagen no disponible');
+  error.setAttribute('role', 'img');
+  error.setAttribute('aria-label', `Imagen no disponible: ${alt}`);
+  add(frame, skeleton, error);
   if (image) {
     const img = node('img');
-    img.src = image;
     img.alt = alt;
-    img.loading = className === 'hero-image' ? 'eager' : 'lazy';
+    img.loading = 'eager';
+    img.decoding = 'async';
     if (className === 'hero-image') img.fetchPriority = 'high';
-    img.addEventListener('load', () => { fallback.setAttribute('aria-hidden', 'true'); frame.classList.add('has-image'); });
-    img.addEventListener('error', () => img.remove());
+    img.addEventListener('load', () => {
+      const reveal = () => frame.classList.add('is-ready');
+      if (img.decode) img.decode().then(reveal, reveal);
+      else reveal();
+    }, { once: true });
+    img.addEventListener('error', () => { img.remove(); frame.classList.add('has-error'); }, { once: true });
     if (desktopImage) {
       const picture = node('picture');
       const source = node('source');
@@ -48,7 +52,8 @@ function photo(image, alt, className, position = 'center', desktopImage = '', de
       add(picture, source, img);
       frame.append(picture);
     } else frame.append(img);
-  }
+    img.src = image;
+  } else frame.classList.add('has-error');
   return frame;
 }
 
@@ -62,7 +67,19 @@ function welcome() {
   const title = node('h1', 'welcome-title', data.title);
   title.id = 'welcome-title';
   const tapsNeeded = Math.max(1, Number(data.heartTaps) || 3);
-  const open = button('♥', 'welcome-heart');
+  const open = button('', 'welcome-heart');
+  const heartIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  heartIcon.classList.add('welcome-heart-icon');
+  heartIcon.setAttribute('viewBox', '0 0 100 100');
+  heartIcon.setAttribute('aria-hidden', 'true');
+  const heartShape = 'M50 88 C47 85 9 58 9 34 C9 18 20 10 33 10 C41 10 47 14 50 21 C53 14 59 10 67 10 C80 10 91 18 91 34 C91 58 53 85 50 88 Z';
+  for (const className of ['welcome-heart-fill', 'welcome-heart-outline']) {
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.classList.add(className);
+    path.setAttribute('d', heartShape);
+    heartIcon.append(path);
+  }
+  open.append(heartIcon);
   open.setAttribute('aria-label', `${data.button}: toca el corazón ${tapsNeeded} veces`);
   const instruction = node('p', 'welcome-instruction', data.heartInstruction);
   instruction.setAttribute('aria-live', 'polite');
@@ -79,6 +96,7 @@ function welcome() {
     if (opening) return;
     taps += 1;
     dots[taps - 1].classList.add('is-lit');
+    open.style.setProperty('--heart-fill', `${taps / tapsNeeded * 100}%`);
     open.classList.remove('is-tapped');
     void open.offsetWidth;
     open.classList.add('is-tapped');
@@ -90,7 +108,6 @@ function welcome() {
     opening = true;
     open.disabled = true;
     instruction.textContent = data.button;
-    scene.classList.add('is-leaving');
     const finish = () => {
       scene.remove();
       document.body.classList.remove('is-locked');
@@ -100,7 +117,10 @@ function welcome() {
       hero.querySelector('h1')?.focus({ preventScroll: true });
     };
     if (reduceMotion.matches) finish();
-    else setTimeout(finish, 480);
+    else setTimeout(() => {
+      scene.classList.add('is-leaving');
+      setTimeout(finish, 480);
+    }, 420);
   });
   return scene;
 }
@@ -139,9 +159,20 @@ function music() {
   const inner = node('div', 'content-width');
   const disc = node('div', 'record');
   if (data.cover) {
-    const image = node('img'); image.src = data.cover; image.alt = 'Portada de nuestra canción';
-    image.addEventListener('error', () => image.remove());
-    disc.append(image);
+    const skeleton = node('div', 'record-skeleton photo-skeleton');
+    skeleton.setAttribute('aria-hidden', 'true');
+    const image = node('img');
+    image.alt = 'Portada de nuestra canción';
+    image.loading = 'eager';
+    image.decoding = 'async';
+    image.addEventListener('load', () => {
+      const reveal = () => disc.classList.add('cover-ready');
+      if (image.decode) image.decode().then(reveal, reveal);
+      else reveal();
+    }, { once: true });
+    image.addEventListener('error', () => { image.remove(); skeleton.remove(); }, { once: true });
+    add(disc, skeleton, image);
+    image.src = data.cover;
   }
   add(disc, node('span', 'record-center', '♥'));
   const selected = data.tracks[0];
@@ -425,6 +456,10 @@ function init() {
     });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal:not(.hero)').forEach(element => observer.observe(element));
+  const photoObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => entry.target.classList.toggle('is-in-view', entry.isIntersecting));
+  }, { threshold: 0.45 });
+  document.querySelectorAll('.photo-frame, .record').forEach(element => photoObserver.observe(element));
   window.addEventListener('pagehide', pauseAllAudio);
 }
 

@@ -7,6 +7,10 @@ export function createQuiz(config, { render, onComplete }) {
   let locked = false;
   let timer;
 
+  if (!config.persistProgress && config.storageKey) {
+    try { sessionStorage.removeItem(config.storageKey); } catch { /* Storage can be unavailable. */ }
+  }
+
   if (config.persistProgress) {
     try {
       const saved = JSON.parse(sessionStorage.getItem(config.storageKey) || 'null');
@@ -30,8 +34,8 @@ export function createQuiz(config, { render, onComplete }) {
   function open() {
     clearTimeout(timer);
     locked = false;
-    if (state.status === 'correct') state.status = 'active';
-    if (state.status === 'idle') state.status = 'active';
+    if (config.resetOnOpen) state = initial();
+    if (state.status === 'correct' || state.status === 'idle') state.status = 'active';
     emit();
     return state.status;
   }

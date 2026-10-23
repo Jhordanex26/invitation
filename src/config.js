@@ -3,13 +3,13 @@ export const config = {
   recipient: { name: 'Saint' },
   sender: { name: 'Diana' },
   theme: {
-    background: '#f5d7e1', soft: '#fff7f9', primary: '#af123e',
-    secondary: '#e6b3c5', text: '#612d40', muted: '#786670',
+    background: '#f1f1f1', soft: '#ffffff', primary: '#171717',
+    secondary: '#d9d9d9', text: '#171717', muted: '#575757',
   },
   welcome: {
-    eyebrow: 'Una historia para volver a sentir',
-    title: 'Para ti, Saint',
-    message: 'Hay recuerdos que merecen un lugar propio. Preparé este pequeño recorrido para volver a encontrarnos en ellos.',
+    eyebrow: 'De tu mejor amiga, Diana',
+    title: 'Para ti, mi amor',
+    message: 'Saint, preparé un lugar para volver a mirar nuestra historia y recordar todo lo que nos hace nosotros.',
     button: 'Abrir mi regalo',
     heartTaps: 3,
     heartInstruction: 'Toca el corazón tres veces para abrir tu regalo',
@@ -21,7 +21,7 @@ export const config = {
     desktopImagePosition: '50% 44%',
     eyebrow: 'De Diana, con todo mi amor',
     subtitle: 'Nuestra historia sigue siendo mi lugar favorito.',
-    date: '23 de febrero de 2025',
+    date: '23 de febrero de 2026',
     dateCaption: 'El día en que nos casamos',
   },
   music: {
@@ -36,9 +36,9 @@ export const config = {
     ],
   },
   memories: [
-    { title: 'Volver a mirarnos', date: 'Uno de nuestros momentos', description: 'Me encanta recordar esos instantes en los que bastaba una mirada para entendernos.', image: new URL('./img/selected/red-dress.jpg', import.meta.url).href, alt: 'Saint y Diana bailando en un jardín', imagePosition: 'center', accent: '#8b2848', art: '01' },
-    { title: 'Celebrar lo nuestro', date: 'Un brindis para dos', description: 'Entre sonrisas y pequeños detalles, también aprendimos a celebrar el camino que compartimos.', image: new URL('./img/selected/picnic.jpg', import.meta.url).href, alt: 'Saint y Diana brindando durante un picnic', imagePosition: 'center 37%', orientation: 'portrait', accent: '#934253', art: '02' },
-    { title: 'Nuestro sí', date: '23 de febrero de 2025', description: 'Ese día prometimos caminar juntos. Una fecha que siempre tendrá un lugar especial en nuestra historia.', image: new URL('./img/selected/ceremony-desktop.jpg', import.meta.url).href, alt: 'Saint y Diana durante su ceremonia de matrimonio', imagePosition: 'center 40%', accent: '#755145', art: '03' },
+    { title: 'Volver a mirarnos', date: 'Uno de nuestros momentos', description: 'Me encanta recordar esos instantes en los que bastaba una mirada para entendernos.', image: new URL('./img/selected/red-dress.jpg', import.meta.url).href, alt: 'Saint y Diana bailando en un jardín', imagePosition: 'center', accent: '#202020', art: '01' },
+    { title: 'Celebrar lo nuestro', date: 'Un brindis para dos', description: 'Entre sonrisas y pequeños detalles, también aprendimos a celebrar el camino que compartimos.', image: new URL('./img/selected/picnic.jpg', import.meta.url).href, alt: 'Saint y Diana brindando durante un picnic', imagePosition: 'center 37%', orientation: 'portrait', accent: '#383838', art: '02' },
+    { title: 'Nuestro sí', date: '23 de febrero de 2026', description: 'Ese día prometimos caminar juntos. Una fecha que siempre tendrá un lugar especial en nuestra historia.', image: new URL('./img/selected/ceremony-desktop.jpg', import.meta.url).href, alt: 'Saint y Diana durante su ceremonia de matrimonio', imagePosition: 'center 40%', accent: '#171717', art: '03' },
   ],
   memoriesSection: {
     eyebrow: 'Nuestra historia en imágenes',
@@ -60,7 +60,7 @@ export const config = {
     title: 'Una carta para Saint',
     salutation: 'Mi querido Saint:',
     paragraphs: [
-      'El 23 de febrero de 2025 comenzamos un capítulo que llevo conmigo todos los días. Recuerdo la emoción de elegirnos y la alegría de saber que nuestro camino continuaría juntos.',
+      'El 23 de febrero de 2026 comenzamos un capítulo que llevo conmigo todos los días. Recuerdo la emoción de elegirnos y la alegría de saber que nuestro camino continuaría juntos.',
       'Esta carta es un pequeño recordatorio de lo mucho que significas para mí. Gracias por los momentos que ya compartimos y por todos los que todavía nos esperan.',
       'Si alguna vez quieres volver a este día, aquí estarán estas palabras para abrazarte de nuevo.',
     ],
@@ -72,7 +72,7 @@ export const config = {
     instruction: 'Cada toque abre un pedacito de recuerdo',
     memories: [
       'Mi recuerdo favorito siempre empieza contigo.',
-      'Nuestro sí del 23 de febrero de 2025 sigue latiendo aquí.',
+      'Nuestro sí del 23 de febrero de 2026 sigue latiendo aquí.',
       'Me emociona todo lo que aún nos queda por vivir.',
     ],
     finalMessage: 'Y lo más bonito es que nuestra historia continúa.',

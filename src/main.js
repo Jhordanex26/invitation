@@ -22,15 +22,21 @@ const section = (className, label) => {
   element.setAttribute('aria-label', label);
   return element;
 };
+const refreshImageUrl = (url, version) => {
+  const refreshed = new URL(url, document.baseURI);
+  refreshed.searchParams.set('imageRetry', String(version));
+  return refreshed.href;
+};
+
 function photo(image, alt, className, position = 'center', desktopImage = '', desktopPosition = 'center') {
   const frame = node('div', `photo-frame ${className}`);
   frame.style.setProperty('--image-position', position);
   frame.style.setProperty('--desktop-position', desktopPosition);
   const skeleton = node('div', 'photo-skeleton');
   skeleton.setAttribute('aria-hidden', 'true');
-  const error = node('span', 'photo-error', 'Imagen no disponible');
-  error.setAttribute('role', 'img');
-  error.setAttribute('aria-label', `Imagen no disponible: ${alt}`);
+  const error = node('div', 'photo-error');
+  error.setAttribute('role', 'status');
+  add(error, node('span', '', image ? 'No se pudo cargar esta foto.' : 'Fotografía no configurada.'));
   add(frame, skeleton, error);
   if (image) {
     const img = node('img');
@@ -38,21 +44,59 @@ function photo(image, alt, className, position = 'center', desktopImage = '', de
     img.loading = 'eager';
     img.decoding = 'async';
     if (className === 'hero-image') img.fetchPriority = 'high';
+    let retries = 0;
+    let requestVersion = 0;
+    let retryTimer;
+    let source;
+    let usedMobileFallback = false;
+    const requestImage = (refresh = false) => {
+      const version = refresh ? ++requestVersion : 0;
+      if (source) source.srcset = refresh ? refreshImageUrl(desktopImage, version) : desktopImage;
+      img.src = refresh ? refreshImageUrl(image, version) : image;
+    };
     img.addEventListener('load', () => {
-      const reveal = () => frame.classList.add('is-ready');
+      clearTimeout(retryTimer);
+      retries = 0;
+      const loadedUrl = img.currentSrc;
+      const reveal = () => {
+        if (img.currentSrc !== loadedUrl) return;
+        frame.classList.remove('has-error');
+        frame.classList.add('is-ready');
+      };
       if (img.decode) img.decode().then(reveal, reveal);
       else reveal();
-    }, { once: true });
-    img.addEventListener('error', () => { img.remove(); frame.classList.add('has-error'); }, { once: true });
+    });
+    img.addEventListener('error', () => {
+      clearTimeout(retryTimer);
+      frame.classList.remove('is-ready');
+      if (retries < 2) {
+        retries++;
+        retryTimer = setTimeout(() => requestImage(true), 450 * retries);
+      } else if (source && !usedMobileFallback && matchMedia('(min-width: 701px)').matches) {
+        usedMobileFallback = true;
+        source.remove();
+        source = null;
+        retries = 0;
+        img.src = refreshImageUrl(image, ++requestVersion);
+      } else frame.classList.add('has-error');
+    });
+    const retry = button('Reintentar foto', 'photo-retry');
+    retry.setAttribute('aria-label', `Reintentar fotografía: ${alt}`);
+    retry.addEventListener('click', () => {
+      clearTimeout(retryTimer);
+      retries = 0;
+      frame.classList.remove('has-error');
+      requestImage(true);
+    });
+    error.append(retry);
     if (desktopImage) {
       const picture = node('picture');
-      const source = node('source');
+      source = node('source');
       source.media = '(min-width: 701px)';
-      source.srcset = desktopImage;
       add(picture, source, img);
       frame.append(picture);
     } else frame.append(img);
-    img.src = image;
+    requestImage();
   } else frame.classList.add('has-error');
   return frame;
 }
@@ -131,8 +175,11 @@ function hero() {
   const image = photo(data.image, `Fotografía de ${config.recipient.name} y ${config.sender.name}`, 'hero-image', data.imagePosition, data.desktopImage, data.desktopImagePosition);
   const content = node('div', 'hero-content');
   const name = node('h1', 'hero-name', config.recipient.name);
+  const titleHeart = node('span', 'hero-heart', '♥');
+  titleHeart.setAttribute('aria-hidden', 'true');
+  name.append(titleHeart);
   name.tabIndex = -1;
-  add(content, node('p', 'eyebrow', data.eyebrow), node('span', 'hero-heart', '♥'), name,
+  add(content, node('p', 'eyebrow', data.eyebrow), name,
     node('p', 'hero-subtitle', data.subtitle), node('span', 'hero-rule'),
     node('p', 'hero-date-caption', data.dateCaption), node('p', 'hero-date', data.date),
     node('p', 'scroll-cue', 'Desliza para continuar ↓'));
@@ -169,8 +216,14 @@ function music() {
       const reveal = () => disc.classList.add('cover-ready');
       if (image.decode) image.decode().then(reveal, reveal);
       else reveal();
-    }, { once: true });
-    image.addEventListener('error', () => { image.remove(); skeleton.remove(); }, { once: true });
+    });
+    let coverRetries = 0;
+    image.addEventListener('error', () => {
+      if (coverRetries < 2) {
+        coverRetries++;
+        setTimeout(() => { image.src = refreshImageUrl(data.cover, coverRetries); }, 450 * coverRetries);
+      } else { image.remove(); skeleton.remove(); }
+    });
     add(disc, skeleton, image);
     image.src = data.cover;
   }
@@ -434,7 +487,7 @@ function showInvitation() {
 }
 
 function init() {
-  document.title = `Un regalo para ${config.recipient.name}`;
+  document.title = `Un regalo para ${config.recipient.name} ♥`;
   const root = document.documentElement;
   Object.entries(config.theme).forEach(([key, value]) => root.style.setProperty(`--color-${key}`, value));
   const story = node('main', 'story');
